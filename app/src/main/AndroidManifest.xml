@@ -20,4 +20,9 @@
         </activity>
     </application>
 
+
+    <!--PERMISSIONS-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!--PERMISSIONS-->
+
 </manifest>
