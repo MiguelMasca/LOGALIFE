@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LOGALIFE</string>
+    <string name="run_logalife_button">Run LOGALIFE</string>
 </resources>
