@@ -1,17 +1,27 @@
 package com.example.logalife.contacts;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.logalife.MainActivity;
 import com.example.logalife.utils.DateUtils;
 import com.example.logalife.utils.FirebaseUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -26,11 +36,25 @@ import java.util.List;
 public class ContactManager {
 
     Context context;
+
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public ContactManager(Context context) {
         this.context = context;
+    }
+
+    public void requestPermissions(Activity activity) {
+        try {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_CONTACTS}, 101);
+            }
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_CALL_LOG}, 101);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("Range")

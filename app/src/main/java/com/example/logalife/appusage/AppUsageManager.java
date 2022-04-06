@@ -27,8 +27,6 @@ import java.util.List;
 public class AppUsageManager {
 
     Context context;
-    private UsageStatsManager mUsageStatsManager;
-
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -38,8 +36,8 @@ public class AppUsageManager {
     }
 
 
-    public void requestAppStatsPermissions(Activity activity) {
-        mUsageStatsManager = (UsageStatsManager) activity.getSystemService(Context.USAGE_STATS_SERVICE);
+    public void requestPermissions(Activity activity) {
+        UsageStatsManager mUsageStatsManager = (UsageStatsManager) activity.getSystemService(Context.USAGE_STATS_SERVICE);
         List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, 0, System.currentTimeMillis());
         boolean isEmpty = stats.isEmpty();
         if (isEmpty) {

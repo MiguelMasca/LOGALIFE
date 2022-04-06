@@ -36,7 +36,7 @@ public class LocationManager {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
-    public void requestAppLocationPermissions(Activity activity) {
+    public void requestPermissions(Activity activity) {
         try {
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
@@ -65,7 +65,6 @@ public class LocationManager {
                         Exception exception = task.getException();
                         Log.d("ERROR RETRIEVING LOCATION: ", "Exception thrown: " + exception);
                     }
-
                 }
             }));
         } else {
@@ -80,4 +79,5 @@ public class LocationManager {
         locationRef.child("" + locationInfo.timestamp).setValue(locationInfo);
         Log.d("SAVING LOCATION: ", "Location: " + location.getLatitude() + ", " + location.getLongitude());
     }
+
 }
