@@ -2,36 +2,23 @@ package com.example.logalife.contacts;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.logalife.MainActivity;
-import com.example.logalife.utils.DateUtils;
 import com.example.logalife.utils.FirebaseUtils;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ContactManager {
 

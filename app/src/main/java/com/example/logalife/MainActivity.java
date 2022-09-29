@@ -1,10 +1,5 @@
 package com.example.logalife;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -15,40 +10,43 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-//Contact List
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.logalife.appusage.AppUsageManager;
 import com.example.logalife.contacts.ContactManager;
 import com.example.logalife.files.FileManager;
-import com.example.logalife.location.LocationUtils;
 import com.example.logalife.location.LocationManager;
-import com.example.logalife.location.LocationService;
+import com.example.logalife.location.LocationUtils;
+import com.example.logalife.microphone.MicrophoneManager;
+import com.example.logalife.services.ForegroundService;
+import com.example.logalife.utils.FirebaseUtils;
 
 import java.io.IOException;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
-    Context context;
+    static Context context;
 
     ContactManager contactManager;
     AppUsageManager appUsageManager;
     LocationManager locationManager;
     FileManager fileManager;
+    MicrophoneManager microphoneManager;
 
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    public static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //
         super.onCreate(savedInstanceState);
 
-        /*Intent intent = new Intent(this, ForegroundService.class);
+        FirebaseUtils.logToken();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }*/
         //
         context = this.getApplicationContext();
         setContentView(R.layout.activity_main);
@@ -73,19 +71,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //
-        /*contactManager = new ContactManager(context);
+        contactManager = new ContactManager(context);
         contactManager.requestPermissions(this);
         //
         appUsageManager = new AppUsageManager(context);
-        appUsageManager.requestPermissions(this);
+        /*appUsageManager.requestPermissions(this);
         //
         locationManager = new LocationManager(context);
-        locationManager.requestPermissions(this);*/
+        locationManager.requestPermissions(this);
         //
+        microphoneManager = MicrophoneManager.getInstance();*/
         fileManager = new FileManager(context);
+
         //
     }
 
+
+    public static Context getContext() {
+        return context;
+    }
 
     public Activity getActivity() {
         return this;
@@ -94,26 +98,31 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when the user touches the button
      */
-    public void runLogalife(View view)  {
+    public void runLogalife(View view) throws IOException {
         //
-        fileManager.requestPermissions(MainActivity.this);
-
+        //fileManager.requestPermissions(MainActivity.this);
+        appUsageManager.requestPermissions(this);
+        appUsageManager.getApplicationsUsage(context, false, true);
         /*contactManager.requestPermissions(this);
         appUsageManager.requestPermissions(this);
         locationManager.requestPermissions(this);
         //
         //CONTACTS
-        /*contactManager.getContacts(context);
-        contactManager.readPhoneCallRecordList(context);
+        //contactManager.getContacts(context);
+        //contactManager.readPhoneCallRecordList(context);
         //
         //USER STATS
-        appUsageManager.getApplicationsUsage(context, false, true);*/
+        appUsageManager.getApplicationsUsage(context, false, true);
         //
         //LOCATION
-        //locationManager.getCurrentLocation();
+        //locationManager.getCurrentLocation();*/
         //
         //FILES
         fileManager.getFiles();
+        fileManager.fetchFileFromFirebase();
+
+        //MIC:
+//        microphoneManager.toogleMicrophone(MainActivity.this);
 
     }
 
@@ -134,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (activityManager != null) {
             for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-                if (LocationService.class.getName().equals(service.service.getClassName()) && service.foreground) {
+                if (ForegroundService.class.getName().equals(service.service.getClassName()) && service.foreground) {
                     return true;
                 }
             }
@@ -144,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startLocationService() {
         if (!isLocationServiceRunning()) {
-            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+            Intent intent = new Intent(getApplicationContext(), ForegroundService.class);
             intent.setAction(LocationUtils.ACTION_START_LOCATION_SERVICE);
             startService(intent);
             Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
@@ -152,12 +161,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopLocationService() {
-        if (isLocationServiceRunning()) {
-            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+        //if (isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), ForegroundService.class);
             intent.setAction(LocationUtils.ACTION_STOP_LOCATION_SERVICE);
             stopService(intent);
             Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
-        }
+        //}
     }
 
 

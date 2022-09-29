@@ -21,6 +21,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+
 public class LocationManager {
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -68,15 +71,27 @@ public class LocationManager {
                 }
             }));
         } else {
-            // TODO: Request fine location permission
+            //Request fine location permission
             Log.d("LOCATION", "Request fine location permission.");
         }
     }
 
-    private void saveLocationInfoInFirebase(Location location){
-        DatabaseReference locationRef = databaseReference.child("location");
+    public static void saveLocationInfoInFirebase(Location location){
+
+        FirebaseDatabase fDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dbReference = fDatabase.getReference();
+
+        LocalDateTime date = LocalDateTime.now();
+        DecimalFormat dmFormat= new DecimalFormat("00");
+        String month = dmFormat.format(Double.valueOf(date.getMonthValue()));
+        String day = dmFormat.format(Double.valueOf(date.getDayOfMonth()));
+        String hours = dmFormat.format(Double.valueOf(date.getHour()));
+        String minutes = dmFormat.format(Double.valueOf(date.getMinute()));
+        String seconds = dmFormat.format(Double.valueOf(date.getSecond()));
+        DatabaseReference locationRef = dbReference.child("location").child("" + date.getYear()).child("" + month).child("" + day);
+
         LocationInfo locationInfo = new LocationInfo(System.currentTimeMillis(), location.getLatitude(),location.getLongitude(),location.getAltitude());
-        locationRef.child("" + locationInfo.timestamp).setValue(locationInfo);
+        locationRef.child(hours + ":" + "" + minutes + ":" + seconds).setValue(locationInfo);
         Log.d("SAVING LOCATION: ", "Location: " + location.getLatitude() + ", " + location.getLongitude());
     }
 

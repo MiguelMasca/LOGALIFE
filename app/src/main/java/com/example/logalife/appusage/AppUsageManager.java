@@ -1,26 +1,22 @@
 package com.example.logalife.appusage;
 
 
-import static java.util.stream.Collectors.toList;
-
 import android.app.Activity;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.example.logalife.contacts.Contact;
-import com.example.logalife.contacts.PhoneCallRecord;
 import com.example.logalife.utils.DateUtils;
 import com.example.logalife.utils.FirebaseUtils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +50,9 @@ public class AppUsageManager {
         for (UsageStats stat: stats) {
             //
             String validPackageName = FirebaseUtils.replaceDotsWithUnderscore(stat.getPackageName());
+            //
+            PackageManager packageManager= context.getPackageManager();
+            //
             long registeredMillis = (appMinutes.containsKey(validPackageName) ? appMinutes.get(validPackageName) : 0) ;
             //
             //Show only unused apps if user wants to, otherwise only if they were used over a minute
