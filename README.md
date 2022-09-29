@@ -5,7 +5,7 @@ The goal of the **LOGALIFE** project is to analyze how far it is possible for a 
 ## Authors
 
 - Miguel Mascarenhas - Master’s of Cybersecurity and Digital Forensics; School of Technology and Management, Polytechnic of Leiria, Leiria, Portugal; 2202275@my.ipleiria.pt
-- Sónia Luz - Master’s of Cybersecurity and Digital Forensics; School of Technology and Management, Polytechnic of Leiria, Leiria, Portugal; sonia.luz@ipleiria.pt
+- Sónia Luz - Professor at Computers Engineering Dept., School of Technology and Management, Polytechnic of Leiria, Leiria, Portugal; sonia.luz@ipleiria.pt
 
 ## Features
 
